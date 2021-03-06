@@ -13,7 +13,6 @@
         body {
             font-family: Arial, Helvetica, sans-serif;
         }
-
         .column {
             float: left;
             width: 25%;
@@ -29,16 +28,13 @@
             display: table;
             clear: both;
         }
-
         .card {
             box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
             /* this adds the "card" effect */
             padding: 16px;
-            text-align: justify;
+            text-align: center;
             background-color: #f1f1f1;
         }
-
-
 
         /* Responsive columns - one column layout (vertical) on small screens */
         @media screen and (max-width: 600px) {
@@ -49,24 +45,10 @@
             }
         }
 
-        figure {
-            margin: 0;
-        }
-
-        p {
-            background: #f9f9f9;
-            border-left: 3px solid #ccc;
-            padding-left: 5px;
-        }
-
-        .text-uppercase {
-            text-transform: uppercase;
-        }
-
         blockquote {
             background: #f9f9f9;
             border-left: 10px solid #ccc;
-            margin: 0.5em 10px;
+            margin: 1.5em 10px;
             padding: 0.5em 10px;
             quotes: "\201C""\201D""\2018""\2019";
         }
@@ -83,10 +65,24 @@
         blockquote p {
             display: inline;
         }
+
+        figure {
+            margin: 0;
+        }
+
+        p {
+            background: #f9f9f9;
+            border-left: 3px solid #ccc;
+            padding-left: 5px;
+        }
+
+        .text-uppercase {
+            text-transform: uppercase;
+        }
     </style>
 </head>
 <body>
-    <h1>XMLHttpRequest </h1>
+    <h1>Fetch </h1>
     <div class="row">
         <div class="column">
             <div class="card">
@@ -136,32 +132,22 @@
         var routes = ["posts", "comments", "albums", "photos", "todos", "users"]
 
         for (var i = 0; i < routes.length; i++) {
-            var xhttp = new XMLHttpRequest();
-            if (window.XMLHttpRequest) {
-                // code for modern browsers
-                xhttp = new XMLHttpRequest();
-            } else {
-                // code for old IE browsers
-                xhttp = new ActiveXObject("Microsoft.XMLHTTP");
-            }
-
             var route = routes[i];
             var limit = 20
-            if (route == "users") {
+            if (route == "users"){
                 limit = 10;
             }
-            var url = "https://jsonplaceholder.typicode.com/" + route + "?_limit=" + limit;
+            var url = "https://jsonplaceholder.typicode.com/" + route +"?_limit=" +limit;
 
             sendRequest(url, route);
+            
 
         }
 
         function sendRequest(url, route) {
-            xhttp.open("GET", url);
-
-            xhttp.onreadystatechange = function () {
-                if (this.readyState == 4 && this.status == 200) {
-                    var data = JSON.parse(this.responseText);
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
                     document.getElementById(route).innerHTML += `<h2 class="text-uppercase">${route}</h2>`;
                     if (route == "users") {
                         for (var i = 0; i < data.length; i++) {
@@ -178,11 +164,7 @@
                         }
                     }
 
-                }
-
-            };
-
-            xhttp.send();
+                });
 
         }
 
