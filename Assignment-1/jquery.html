@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simple AJAX</title>
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
     <style>
         * {
             box-sizing: border-box;
@@ -13,7 +14,6 @@
         body {
             font-family: Arial, Helvetica, sans-serif;
         }
-
         .column {
             float: left;
             width: 25%;
@@ -29,16 +29,13 @@
             display: table;
             clear: both;
         }
-
         .card {
             box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
             /* this adds the "card" effect */
             padding: 16px;
-            text-align: justify;
+            text-align: center;
             background-color: #f1f1f1;
         }
-
-
 
         /* Responsive columns - one column layout (vertical) on small screens */
         @media screen and (max-width: 600px) {
@@ -49,24 +46,10 @@
             }
         }
 
-        figure {
-            margin: 0;
-        }
-
-        p {
-            background: #f9f9f9;
-            border-left: 3px solid #ccc;
-            padding-left: 5px;
-        }
-
-        .text-uppercase {
-            text-transform: uppercase;
-        }
-
         blockquote {
             background: #f9f9f9;
             border-left: 10px solid #ccc;
-            margin: 0.5em 10px;
+            margin: 1.5em 10px;
             padding: 0.5em 10px;
             quotes: "\201C""\201D""\2018""\2019";
         }
@@ -83,10 +66,24 @@
         blockquote p {
             display: inline;
         }
+
+        figure {
+            margin: 0;
+        }
+
+        p {
+            background: #f9f9f9;
+            border-left: 3px solid #ccc;
+            padding-left: 5px;
+        }
+
+        .text-uppercase {
+            text-transform: uppercase;
+        }
     </style>
 </head>
 <body>
-    <h1>XMLHttpRequest </h1>
+    <h1>JQuery AJAX </h1>
     <div class="row">
         <div class="column">
             <div class="card">
@@ -132,19 +129,11 @@
         </div>
     </div>
 
+
     <script>
         var routes = ["posts", "comments", "albums", "photos", "todos", "users"]
 
         for (var i = 0; i < routes.length; i++) {
-            var xhttp = new XMLHttpRequest();
-            if (window.XMLHttpRequest) {
-                // code for modern browsers
-                xhttp = new XMLHttpRequest();
-            } else {
-                // code for old IE browsers
-                xhttp = new ActiveXObject("Microsoft.XMLHTTP");
-            }
-
             var route = routes[i];
             var limit = 20
             if (route == "users") {
@@ -156,13 +145,12 @@
 
         }
 
+        // Function to send request
         function sendRequest(url, route) {
-            xhttp.open("GET", url);
-
-            xhttp.onreadystatechange = function () {
-                if (this.readyState == 4 && this.status == 200) {
-                    var data = JSON.parse(this.responseText);
+            $.ajax({
+                url: url, success: function (data) {
                     document.getElementById(route).innerHTML += `<h2 class="text-uppercase">${route}</h2>`;
+                    // Display in interface
                     if (route == "users") {
                         for (var i = 0; i < data.length; i++) {
                             document.getElementById(route).innerHTML += `<p>${data[i].name}<br> <small>${data[i].email}</small></p>`;
@@ -177,12 +165,8 @@
                             document.getElementById(route).innerHTML += `<p>${data[i].title}</p>`;
                         }
                     }
-
                 }
-
-            };
-
-            xhttp.send();
+            });
 
         }
 
